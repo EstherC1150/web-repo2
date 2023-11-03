@@ -1,16 +1,39 @@
 //student.js
 
+import svc from './service.js'; //export default했으면 {}안써도됨
+
+
+//fetch('../studentList.do')
+//	.then(resolve => resolve.json())
+//	.then(result => {
+//		console.log(result);
+//		let tbody = document.querySelector('#list');
+//		result.forEach(student => {
+//			tbody.append(makeTr(student));
+//		})
+//	})
+//	.catch(err => console.log('error=>', err));
+
+
 //페이지 로딩되면서 바로 실행
-fetch('../studentList.do')
-	.then(resolve => resolve.json())
-	.then(result => {
+//비동기방식코드 -> 순차적 가독성 높이기 : async, await
+//async함수(
+//	await처리 : async함수 안에서만 쓸 수 있음 (promise객체)
+//	await처리 : async함수 안에서만 쓸 수 있음 (promise객체)
+//	await처리 : async함수 안에서만 쓸 수 있음 (promise객체)
+//)
+svc.studentList(
+	//성공후 실행함수
+	result => {
 		console.log(result);
 		let tbody = document.querySelector('#list');
 		result.forEach(student => {
 			tbody.append(makeTr(student));
 		})
-	})
-	.catch(err => console.log('error=>', err));
+	},
+	//실패후 실행함수
+	err => console.log('error=>', err)
+);
 
 //등록버튼 이벤트		
 document.querySelector('#addBtn').addEventListener('click', addCallback);
@@ -19,10 +42,9 @@ document.querySelector('#addBtn').addEventListener('click', addCallback);
 document.querySelector('#modBtn').addEventListener('click', modCallback);
 
 
-
-
 //callback함수
 function addCallback(e) {
+	
 	//학생아이디 입력값
 	let sid = document.querySelector('input[name=sid]').value;
 	let sname = document.querySelector('input[name=sname]').value;
@@ -37,12 +59,16 @@ function addCallback(e) {
 	//fetch('../addStudent.do?' + param)
 	//get: url패턴. 값의제한
 	//post: 파라미터 볼 수 없음, 표현 X, 값 무제한, content-type지정, 주소표시 칠 수 없음
-	fetch('../addStudent.do', {
+	
+	svc.addStudent(
+		//optObj :
+		{
 		method: 'post',
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 		body: param
-	}).then(resolve => resolve.json())
-		.then(result => {
+		},
+		//successCallback
+		result => {
 			if (result.retCode == 'OK') {
 				alert('성공');
 				let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth });
@@ -50,8 +76,26 @@ function addCallback(e) {
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error => ', err));
+		},
+		//errorCallback
+		err => console.log('error => ', err)
+	);
+//	fetch('../addStudent.do', {
+//		method: 'post',
+//		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//		body: param
+//	}).then(resolve => resolve.json())
+//		.then(result => {
+//			if (result.retCode == 'OK') {
+//				alert('성공');
+//				let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth });
+//				document.querySelector('#list').append(tr);
+//			} else {
+//				alert('실패');
+//			}
+//		})
+//		.catch(err => console.log('error => ', err));
+
 } //end of addCallback
 
 function modCallback() {
@@ -61,12 +105,14 @@ function modCallback() {
 	let birth = document.querySelector('.modal-body input[name=birth]').value;
 	let param = `id=${id}&name=${sname}&pass=${pass}&birth=${birth}`;
 
-	fetch('../editStudent.do', {
+	svc.editStudent(
+		{
 		method: 'post',
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 		body: param
-	}).then(resolve => resolve.json())
-		.then(result => {
+		},
+		//successCallback
+		result => {
 			console.log(result);
 			if (result.retCode == 'OK') {
 				alert('성공');
@@ -79,8 +125,32 @@ function modCallback() {
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error => ', err));
+		},
+		//errorCallback
+		err => console.log('error => ', err)
+	);
+	
+//	fetch('../editStudent.do', {
+//		method: 'post',
+//		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+//		body: param
+//	}).then(resolve => resolve.json())
+//		.then(result => {
+//			console.log(result);
+//			if (result.retCode == 'OK') {
+//				alert('성공');
+//				//result.vo.studentId;
+//				let targetTr = document.querySelector('tr[data-sid=' + result.vo.studentId + ']');
+//				let newTr = makeTr(result.vo);
+//				let parentElem = document.querySelector('#list');
+//				parentElem.replaceChild(newTr, targetTr);
+//				document.getElementById("myModal").style.display = 'none';
+//			} else {
+//				alert('실패');
+//			}
+//		})
+//		.catch(err => console.log('error => ', err));
+
 } //end of modCallback
 
 
@@ -106,9 +176,8 @@ function makeTr(obj) {
 	btn.innerHTML = '삭제';
 	btn.addEventListener('click', function(e) {
 		//ajax호출 -> 서블릿실행
-		fetch('../delStudent.do?sid=' + obj.studentId)
-			.then(resolve => resolve.json())
-			.then(result => {
+		svc.removeStudent(obj.studentId,
+			result => {
 				console.log(result);
 				if (result.retCode == 'OK') {
 					alert('삭제성공');
@@ -116,8 +185,22 @@ function makeTr(obj) {
 				} else {
 					alert('삭제실패');
 				}
-			})
-			.catch(err => console.log('error: ', err));
+			},
+			err => console.log('error: ', err)
+		)
+		
+//		fetch('../delStudent.do?sid=' + obj.studentId)
+//			.then(resolve => resolve.json())
+//			.then(result => {
+//				console.log(result);
+//				if (result.retCode == 'OK') {
+//					alert('삭제성공');
+//					tr.remove();
+//				} else {
+//					alert('삭제실패');
+//				}
+//			})
+//			.catch(err => console.log('error: ', err));
 	})
 	td.append(btn);
 	tr.append(td);
@@ -147,18 +230,33 @@ function showModal(e) {
 		}
 	}
 
-	fetch("../getStudent.do?sid=" + id)
-		.then(resolve => resolve.json())
-		.then(result => {
-
+	//단건조회
+	svc.getStudent( //id, successCallback, errorCallback
+		id, 
+		result => {
 			modal.style.display = "block";
-
 			//let data = { id: "std1", name: "홍길동", pass: "1234", birth: "1999-09-09" };
-
 			modal.querySelector('h2').innerHTML = result.studentName;
 			modal.querySelector('input[name=pass]').value = result.studentPassword;
 			modal.querySelector('input[name=name]').value = result.studentName;
 			modal.querySelector('input[name=birth]').value = result.studentBirthday;
 			modal.querySelector('input[name=sid]').value = result.studentId;
-		})
+		},
+		err => console.log('error: ', err)
+	)
+	
+//	fetch("../getStudent.do?sid=" + id)
+//		.then(resolve => resolve.json())
+//		.then(result => {
+//
+//			modal.style.display = "block";
+//
+//			//let data = { id: "std1", name: "홍길동", pass: "1234", birth: "1999-09-09" };
+//
+//			modal.querySelector('h2').innerHTML = result.studentName;
+//			modal.querySelector('input[name=pass]').value = result.studentPassword;
+//			modal.querySelector('input[name=name]').value = result.studentName;
+//			modal.querySelector('input[name=birth]').value = result.studentBirthday;
+//			modal.querySelector('input[name=sid]').value = result.studentId;
+//		})
 }
