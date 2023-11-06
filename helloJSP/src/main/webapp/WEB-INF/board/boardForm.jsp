@@ -1,35 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>boardForm.jsp</title>
-</head>
-<body>
+<%@include file="../layout/menu.jsp" %>
+<%@include file="../layout/header.jsp" %>
+
 	<h3>게시글 등록화면</h3>
-	<form action="addBoard.do" method="get">
-		<table border="1">
+	<form action="addBoard.do" method="post" enctype="multipart/form-data">
+		<table class="table">
 			<tr>
 				<th>제목</th>
-				<td><input type="text" name="title"></td>
+				<td><input type="text" class="form-control" name="title"></td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td><input type="text" name="writer"></td>
+				<td><input type="text" readonly class="form-control" name="writer" value="<%=logId%>"></td>
 			</tr>
 			<tr>
 				<td colspan="2">
-					<textarea cols="40" rows="5" name="content"></textarea>
+					<textarea cols="40" rows="5" class="form-control" name="content"></textarea>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2">
-					<input type="submit" value="저장">
-					<input type="reset" value="초기화">
+				<th>파일명</th>
+				<td><input type="file" name="img"></td>
+				
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<input type="submit" class="btn btn-primary" value="저장">
+					<input type="reset" class="btn btn-warning" value="초기화">
 				</td>
 			</tr>
 		</table>
 	</form>
-</body>
-</html>
+<%@include file="../layout/footer.jsp" %>
