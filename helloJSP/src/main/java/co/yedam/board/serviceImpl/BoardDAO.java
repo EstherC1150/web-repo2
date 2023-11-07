@@ -191,7 +191,7 @@ public class BoardDAO {
 	
 	
 	public List<MemberVO> memberList() {
-		sql = "select * from member";
+		sql = "select * from member order by 1";
 		conn = ds.getConnection();
 		List<MemberVO> list =  new ArrayList<>();
 		try {

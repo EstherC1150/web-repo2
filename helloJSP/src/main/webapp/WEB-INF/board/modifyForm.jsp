@@ -22,7 +22,7 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-					<textarea cols="40" rows="5" name="content" class="form-control"><%=vo.getContent()%></textarea>
+					<textarea name="content" class="form-control"><%=vo.getContent()%></textarea>
 				</td>
 			</tr>
 			<tr>

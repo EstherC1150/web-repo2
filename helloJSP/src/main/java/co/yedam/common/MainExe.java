@@ -3,31 +3,47 @@ package co.yedam.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
 
 import co.yedam.board.service.BoardService;
 import co.yedam.board.service.BoardVO;
 import co.yedam.board.serviceImpl.BoardDAO;
 import co.yedam.board.serviceImpl.BoardServiceImpl;
+import co.yedam.reply.mapper.ReplyMapper;
+import co.yedam.reply.service.ReplyVO;
 import co.yedam.student.service.StudentService;
 import co.yedam.student.service.StudentVO;
 import co.yedam.student.serviceImpl.StudentServiceImpl;
 
 public class MainExe {
 	public static void main(String[] args) {
+		SqlSession session = DataSourceMybatis.getInstance().openSession(true);
 		
-		BoardService svc = new BoardServiceImpl();
-		svc.boardList().forEach(st -> System.out.println(st));
+		ReplyMapper mapper = session.getMapper(ReplyMapper.class);
 		
-		BoardDAO dao = new BoardDAO();
-		BoardVO vo = new BoardVO();
-		vo.setTitle("test");
-		vo.setWriter("user03");
-		vo.setContent("content3");
-		if (dao.update(vo) == 1) {
-			System.out.println("OK");
-		} else {
-			System.out.println("NG");
-		}
+		List<ReplyVO> list = mapper.replyList(1);
+		list.forEach(vo -> System.out.println(vo));
+		
+		
+		
+//		BoardService svc = new BoardServiceImpl();
+//		svc.boardList().forEach(st -> System.out.println(st));
+//		
+//		BoardDAO dao = new BoardDAO();
+//		BoardVO vo = new BoardVO();
+//		vo.setTitle("test");
+//		vo.setWriter("user03");
+//		vo.setContent("content3");
+//		if (dao.update(vo) == 1) {
+//			System.out.println("OK");
+//		} else {
+//			System.out.println("NG");
+//		}
+		
+		
+		
 //		//학생아이디, 비밀번호, 이름, 학과, 생일
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //		StudentVO vo = new StudentVO();
