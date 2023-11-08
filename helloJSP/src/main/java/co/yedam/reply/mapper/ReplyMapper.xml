@@ -4,7 +4,16 @@
 <mapper namespace="co.yedam.reply.mapper.ReplyMapper">
 
 	<select id="replyList" resultType="co.yedam.reply.service.ReplyVO">
-		select * from reply where board_no = #{boardNo}
+		<![CDATA[
+			select * 
+			from (
+				select  /* + INDEX(r reply_pk) */  rownum rn, r.*
+				from reply r
+				where r.board_no = #{boardNo}
+					) a
+			where a.rn > (#{page} - 1) * 5
+			and a.rn <= (#{page}) * 5
+		]]>
 	</select>
 	
 	<select id="selectReply" resultType="co.yedam.reply.service.ReplyVO" parameterType="int">
@@ -23,7 +32,15 @@
 	</update>
 	
 	<delete id="deleteReply" parameterType="int">
-		delete from board where reply_no = #{replyNo}
+		delete from reply where reply_no = #{replyNo}
 	</delete>
+	
+	<select id="getTotalCnt" resultType="int">
+		select count(*) from reply where board_no = #{boardNo}
+	</select>
+	
+	<select id="getReplyCountByWriter" resultType="map">
+		select replyer, count(*) cnt from reply group by replyer
+	</select>
 	
 </mapper>
