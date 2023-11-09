@@ -15,7 +15,7 @@
 			console.log(result);
 			let dataAry = [['Writer', 'Cnt']];
 			result.forEach(item => {
-				dataAry.push([item.REPLYER, item.CNT]);
+				dataAry.push([item.replyer, item.cnt]);
 			})
 			console.log(dataAry);
 			var data = google.visualization.arrayToDataTable(dataAry);

@@ -40,7 +40,7 @@
 	</select>
 	
 	<select id="getReplyCountByWriter" resultType="map">
-		select replyer, count(*) cnt from reply group by replyer
+		select replyer "replyer", count(*) "cnt" from reply group by replyer
 	</select>
 	
 </mapper>

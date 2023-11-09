@@ -49,7 +49,7 @@
 				<a class="list-group-item list-group-item-action list-group-item-light p-3" href="memberList.do">회원관리</a>
 			</c:if>
 			<!-- 관리자 권한일 경우 -->
-			<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Events</a>
+			<a class="list-group-item list-group-item-action list-group-item-light p-3" href="chartForm.do">Chart</a>
 			<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Profile</a>
 			<a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>
 		</div>
