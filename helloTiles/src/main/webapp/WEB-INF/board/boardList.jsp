@@ -10,7 +10,7 @@
 <body>
 
 <%-- 	${list } --%>
-	<h3>게시판 목록</h3>
+	<h3>list</h3>
 	<table class="table">
 		<thead>
 			<tr>
@@ -20,17 +20,6 @@
 				<th>작성일자</th>
 			</tr>
 		</thead>
-		
-		<tbody>
-			<c:forEach items="${list }" var="vo">
-				<tr>
-					<td>${vo.boardNo }</td>
-					<td><a href="getBoard.do?bno=${vo.boardNo }">${vo.title }</a></td>
-					<td>${vo.writer }</td>
-					<td><fm:formatDate value="${vo.writeDate }" pattern="yyyy-MM-dd HH:mm:ss"></fm:formatDate></td>
-				</tr>
-			</c:forEach>
-		</tbody>
 	</table>
 	<p><a href="boardForm.do">등록화면</a></p>
 	
